@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { getContacts, getUserUsage } from "@/lib/actions";
+import { getContacts, getUserUsage, getAllAgencies } from "@/lib/actions";
 import ContactsClient from "./ContactsClient";
 
 export default async function ContactsPage() {
@@ -10,14 +10,18 @@ export default async function ContactsPage() {
     redirect("/sign-in");
   }
 
-  const [contacts, usage] = await Promise.all([
-    getContacts(1),
-    getUserUsage()
+  const [contactsData, usage, agencies] = await Promise.all([
+    getContacts(1, 20, '', undefined),
+    getUserUsage(),
+    getAllAgencies()
   ]);
 
   return (
     <ContactsClient 
-      contacts={contacts} 
+      initialContacts={contactsData.contacts}
+      initialTotal={contactsData.total}
+      initialTotalPages={contactsData.totalPages}
+      initialAgencies={agencies}
       initialCount={usage?.count || 0}
     />
   );

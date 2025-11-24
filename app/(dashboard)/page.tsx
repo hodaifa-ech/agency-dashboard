@@ -13,11 +13,13 @@ export default async function DashboardPage() {
     redirect("/sign-in");
   }
 
-  const [agencies, contacts, usage] = await Promise.all([
+  const [agencies, contactsData, usage] = await Promise.all([
     getAgencies(1),
-    getContacts(1),
+    getContacts(1, 20, '', undefined),
     getUserUsage()
   ]);
+
+  const contacts = contactsData.contacts;
 
   const stats = [
     {
@@ -29,7 +31,7 @@ export default async function DashboardPage() {
     },
     {
       title: "Contacts",
-      value: contacts.length,
+      value: contactsData.total,
       description: "Available contacts",
       icon: Users,
       href: "/contacts",

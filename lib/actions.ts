@@ -4,14 +4,41 @@ import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/db";
 import { isSameDay } from "date-fns";
 
-export async function getContacts(page = 1) {
+export async function getContacts(
+  page = 1,
+  pageSize = 20,
+  search = '',
+  agencyId?: string
+) {
   const { userId } = await auth();
-  if (!userId) return [];
+  if (!userId) return { contacts: [], total: 0, totalPages: 0 };
+  
+  // Build where clause for filtering
+  const where: any = {};
+  
+  // Search filter (search in firstName, lastName, email)
+  if (search) {
+    where.OR = [
+      { firstName: { contains: search, mode: 'insensitive' } },
+      { lastName: { contains: search, mode: 'insensitive' } },
+      { email: { contains: search, mode: 'insensitive' } },
+    ];
+  }
+  
+  // Agency filter
+  if (agencyId) {
+    where.agencyId = agencyId;
+  }
+  
+  // Get total count for pagination
+  const total = await prisma.contact.count({ where });
+  const totalPages = Math.ceil(total / pageSize);
   
   // Récupère une liste paginée de contacts (infos publiques seulement)
   const contacts = await prisma.contact.findMany({
-    take: 20,
-    skip: (page - 1) * 20,
+    where,
+    take: pageSize,
+    skip: (page - 1) * pageSize,
     include: { agency: true },
     orderBy: { createdAt: 'desc' }
   });
@@ -41,7 +68,7 @@ export async function getContacts(page = 1) {
   
   const detailsMap = new Map(revealedDetails.map(d => [d.id, { email: d.email, phone: d.phone }]));
   
-  return contacts.map(c => {
+  const mappedContacts = contacts.map(c => {
     const isRevealed = revealedIds.has(c.id);
     const details = detailsMap.get(c.id);
     
@@ -52,6 +79,12 @@ export async function getContacts(page = 1) {
       isRevealed
     };
   });
+  
+  return {
+    contacts: mappedContacts,
+    total,
+    totalPages
+  };
 }
 
 export async function revealContactDetails(contactId: string) {
@@ -151,6 +184,18 @@ export async function getAgencies(page = 1) {
       }
     },
     orderBy: { createdAt: 'desc' }
+  });
+  
+  return agencies;
+}
+
+export async function getAllAgencies() {
+  const agencies = await prisma.agency.findMany({
+    select: {
+      id: true,
+      name: true
+    },
+    orderBy: { name: 'asc' }
   });
   
   return agencies;

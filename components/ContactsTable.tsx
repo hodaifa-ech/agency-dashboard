@@ -24,9 +24,10 @@ interface Contact {
 interface ContactRowProps {
   contact: Contact;
   onReveal?: (newCount: number) => void;
+  onLimitReached?: () => void;
 }
 
-export default function ContactRow({ contact, onReveal }: ContactRowProps) {
+export default function ContactRow({ contact, onReveal, onLimitReached }: ContactRowProps) {
   const [details, setDetails] = useState({ 
     email: contact.isRevealed ? (contact.email || 'N/A') : '****', 
     phone: contact.isRevealed ? (contact.phone || 'N/A') : '****' 
@@ -40,7 +41,11 @@ export default function ContactRow({ contact, onReveal }: ContactRowProps) {
       const result = await revealContactDetails(contact.id);
       
       if (result.error === 'LIMIT_REACHED') {
-        toast.error("🚨 Daily limit reached! Upgrade to Pro to see more contacts.");
+        if (onLimitReached) {
+          onLimitReached();
+        } else {
+          toast.error("🚨 Daily limit reached! Upgrade to Pro to see more contacts.");
+        }
       } else if (result.data) {
         setDetails({
           email: result.data.email || 'N/A',
