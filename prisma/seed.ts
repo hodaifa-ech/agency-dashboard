@@ -9,17 +9,16 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Début du seeding...');
 
-  // 1. Lire et importer les Agences (limité à 50)
+  // 1. Lire et importer les Agences (tous les CSV)
   const agenciesPath = path.join(__dirname, 'data/agencies_agency_rows.csv');
   const agenciesCsv = fs.readFileSync(agenciesPath, 'utf-8');
   
   const parsedAgencies = Papa.parse(agenciesCsv, { header: true, skipEmptyLines: true });
   
-  // Limiter à 50 agences
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const agenciesToInsert = (parsedAgencies.data as any[]).slice(0, 50);
+  const agenciesToInsert = parsedAgencies.data as any[];
   
-  console.log(`Traitement de ${agenciesToInsert.length} agences (limité à 50)...`);
+  console.log(`Traitement de ${agenciesToInsert.length} agences...`);
 
   // On utilise createMany pour aller plus vite, ou une boucle pour gérer les doublons
   // Ici on fait simple et robuste
@@ -45,21 +44,20 @@ async function main() {
     update: {},
     create: {
       originalId: 'orphan-agency',
-      name: 'Agence Inconnue',
+      name: 'Unknown Agency',
       state: 'NA'
     }
   });
 
-  // 3. Lire et importer les Contacts (limité à 50)
+  // 3. Lire et importer les Contacts (tous les CSV)
   const contactsPath = path.join(__dirname, 'data/contacts_contact_rows.csv');
   const contactsCsv = fs.readFileSync(contactsPath, 'utf-8');
   const parsedContacts = Papa.parse(contactsCsv, { header: true, skipEmptyLines: true });
 
-  // Limiter à 50 contacts
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const contactsToInsert = (parsedContacts.data as any[]).slice(0, 50);
+  const contactsToInsert = parsedContacts.data as any[];
 
-  console.log(`Traitement de ${contactsToInsert.length} contacts (limité à 50)...`);
+  console.log(`Traitement de ${contactsToInsert.length} contacts...`);
 
   for (const row of contactsToInsert) {
     if (!row.id || !row.first_name) continue;
