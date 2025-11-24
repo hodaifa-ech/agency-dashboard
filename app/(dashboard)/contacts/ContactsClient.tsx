@@ -118,8 +118,16 @@ export default function ContactsClient({
     setPage(1); // Reset to first page when filtering
   };
 
+  const handleLimitReached = () => {
+    setShowUpgradeDialog(true);
+  };
+
   return (
     <div className="p-6 space-y-6">
+      <UpgradeDialog 
+        open={showUpgradeDialog} 
+        onOpenChange={setShowUpgradeDialog} 
+      />
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Contacts</h1>
@@ -216,6 +224,7 @@ export default function ContactsClient({
                         key={contact.id} 
                         contact={contact} 
                         onReveal={handleReveal}
+                        onLimitReached={handleLimitReached}
                       />
                     ))}
                   </TableBody>
