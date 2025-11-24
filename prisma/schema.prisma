@@ -1,0 +1,56 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Ou "sqlite" si tu testes juste en local sans Vercel pour l'instant
+  url      = env("DATABASE_URL")
+}
+
+model Agency {
+  id              String    @id @default(cuid())
+  originalId      String?   @unique // Pour garder le lien avec ton CSV
+  name            String
+  state           String?
+  type            String?
+  website         String?
+  createdAt       DateTime  @default(now())
+  contacts        Contact[]
+
+  @@index([name])
+}
+
+model Contact {
+  id              String    @id @default(cuid())
+  originalId      String?   @unique // Pour garder le lien avec ton CSV
+  firstName       String?
+  lastName        String?
+  email           String?   // Sera caché par défaut
+  phone           String?   // Sera caché par défaut
+  title           String?
+  agencyId        String?
+  agency          Agency?   @relation(fields: [agencyId], references: [id])
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+}
+
+model UserLimit {
+  id           String    @id @default(cuid())
+  userId       String    @unique // L'ID de l'utilisateur Clerk
+  count        Int       @default(0)
+  lastViewDate DateTime  @default(now())
+}
+
+model ContactReveal {
+  id        String   @id @default(cuid())
+  userId    String   // L'ID de l'utilisateur Clerk
+  contactId String   // L'ID du contact révélé
+  revealedAt DateTime @default(now())
+  
+  @@unique([userId, contactId])
+  @@index([userId])
+  @@index([contactId])
+}
