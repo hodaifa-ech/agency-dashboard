@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 
 interface NavigationProps {
   mobile?: boolean;
+  isCollapsed?: boolean;
 }
 
-export default function Navigation({ mobile = false }: NavigationProps) {
+export default function Navigation({ mobile = false, isCollapsed = false }: NavigationProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -29,14 +30,16 @@ export default function Navigation({ mobile = false }: NavigationProps) {
             key={item.href}
             href={item.href}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
+              "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
+              isCollapsed ? "justify-center" : "gap-3",
               isActive
                 ? "bg-slate-700 text-white font-semibold"
                 : "text-slate-300 hover:bg-slate-800 hover:text-white"
             )}
+            title={isCollapsed ? item.label : undefined}
           >
-            <Icon className="h-5 w-5" />
-            {item.label}
+            <Icon className="h-5 w-5 flex-shrink-0" />
+            {!isCollapsed && <span>{item.label}</span>}
           </Link>
         );
       })}
