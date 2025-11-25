@@ -1,4 +1,3 @@
-
 # Agency Dashboard
 
 A modern, full-stack web application for managing agencies and contacts with a premium upgrade system. Built with Next.js 16, TypeScript, Prisma, and Clerk authentication.
@@ -8,7 +7,6 @@ A modern, full-stack web application for managing agencies and contacts with a p
 - [Overview](#overview)
 - [System Architecture](#system-architecture)
 - [Features](#features)
-- [Interface & Screenshots](#-interface--screenshots)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Database Schema](#database-schema)
@@ -33,88 +31,86 @@ The Agency Dashboard is a comprehensive platform for managing agency relationshi
 ### Architecture Diagram
 
 ```
-
 ┌─────────────────────────────────────────────────────────────────┐
-│                          CLIENT LAYER                           │
+│                         CLIENT LAYER                            │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
 │  │   Dashboard  │  │   Agencies   │  │   Contacts   │         │
 │  │    Page      │  │    Page      │  │    Page      │         │
 │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘         │
-│         │                  │                  │                 │
-│         └──────────────────┼──────────────────┘                 │
-│                            │                                    │
-│                    ┌───────▼────────┐                           │
-│                    │  Shared Layout │                           │
-│                    │  (Sidebar/Nav) │                           │
-│                    └───────┬────────┘                           │
-│                            │                                    │
-│  ┌─────────────────────────▼─────────────────────────┐          │
-│  │             Client Components                     │          │
-│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐           │          │
-│  │  │Contacts  │ │Agencies  │ │Usage     │           │          │
-│  │  │Client    │ │Client    │ │Counter   │           │          │
-│  │  └──────────┘ └──────────┘ └──────────┘           │          │
-│  └───────────────────────────────────────────────────┘          │
-│                            │                                    │
-└────────────────────────────┼────────────────────────────────────┘
-│
-│ Server Actions
-│
-┌────────────────────────────▼────────────────────────────────────┐
-│                      SERVER LAYER                               │
+│         │                  │                  │                  │
+│         └──────────────────┼──────────────────┘                  │
+│                            │                                     │
+│                   ┌────────▼────────┐                            │
+│                   │  Shared Layout  │                            │
+│                   │  (Sidebar/Nav)  │                            │
+│                   └────────┬────────┘                            │
+│                            │                                     │
+│  ┌─────────────────────────▼─────────────────────────┐         │
+│  │              Client Components                      │         │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐          │         │
+│  │  │Contacts  │ │Agencies  │ │Usage     │          │         │
+│  │  │Client    │ │Client    │ │Counter   │          │         │
+│  │  └──────────┘ └──────────┘ └──────────┘          │         │
+│  └───────────────────────────────────────────────────┘         │
+│                            │                                     │
+└────────────────────────────┼─────────────────────────────────────┘
+                             │
+                             │ Server Actions
+                             │
+┌────────────────────────────▼─────────────────────────────────────┐
+│                      SERVER LAYER                                │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ┌──────────────────────────────────────────────────┐           │
-│  │           Server Actions (lib/actions.ts)        │           │
-│  │  ┌──────────────┐  ┌──────────────┐              │           │
-│  │  │ getAgencies  │  │ getContacts  │              │           │
-│  │  │ getAllAgencies│ │revealContact │              │           │
-│  │  │ getUserUsage │  │  Details     │              │           │
-│  │  └──────┬───────┘  └──────┬───────┘              │           │
-│  └─────────┼──────────────────┼─────────────────────┘           │
+│  ┌──────────────────────────────────────────────────┐         │
+│  │           Server Actions (lib/actions.ts)         │         │
+│  │  ┌──────────────┐  ┌──────────────┐             │         │
+│  │  │ getAgencies  │  │ getContacts  │             │         │
+│  │  │ getAllAgencies│ │revealContact │             │         │
+│  │  │ getUserUsage │  │  Details     │             │         │
+│  │  └──────┬───────┘  └──────┬───────┘             │         │
+│  └─────────┼──────────────────┼─────────────────────┘         │
 │            │                  │                                 │
-│  ┌─────────▼──────────────────▼─────────┐                       │
-│  │       Prisma ORM (lib/db.ts)         │                       │
-│  └──────────────┬───────────────────────┘                       │
+│  ┌─────────▼──────────────────▼─────────┐                     │
+│  │      Prisma ORM (lib/db.ts)          │                     │
+│  └──────────────┬───────────────────────┘                     │
 │                 │                                               │
 └─────────────────┼───────────────────────────────────────────────┘
-│
-│ Database Queries
-│
+                  │
+                  │ Database Queries
+                  │
 ┌─────────────────▼───────────────────────────────────────────────┐
-│                    DATABASE LAYER                               │
+│                    DATABASE LAYER                                │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐           │
-│  │   Agency     │  │   Contact    │  │  UserLimit   │           │
-│  │   Table      │  │   Table      │  │   Table      │           │
-│  └──────────────┘  └──────────────┘  └──────────────┘           │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐         │
+│  │   Agency     │  │   Contact    │  │  UserLimit   │         │
+│  │   Table      │  │   Table      │  │   Table      │         │
+│  └──────────────┘  └──────────────┘  └──────────────┘         │
 │                                                                 │
-│  ┌──────────────┐                                               │
-│  │ContactReveal │                                               │
-│  │   Table      │                                               │
-│  └──────────────┘                                               │
+│  ┌──────────────┐                                              │
+│  │ContactReveal │                                              │
+│  │   Table      │                                              │
+│  └──────────────┘                                              │
 │                                                                 │
 │              PostgreSQL Database (Supabase)                     │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│                    EXTERNAL SERVICES                            │
+│                    EXTERNAL SERVICES                             │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
-│  ┌──────────────┐                                               │
-│  │    Clerk     │  - User Authentication & Management           │
-│  │  (Auth)      │                                               │
-│  └──────────────┘                                               │
+│  ┌──────────────┐                                              │
+│  │    Clerk     │  - User Authentication & Management          │
+│  │  (Auth)      │                                              │
+│  └──────────────┘                                              │
 │                                                                 │
-│  ┌──────────────┐                                               │
-│  │  Supabase    │  - PostgreSQL Database Hosting                │
-│  │  (Database)  │                                               │
-│  └──────────────┘                                               │
+│  ┌──────────────┐                                              │
+│  │  Supabase    │  - PostgreSQL Database Hosting              │
+│  │  (Database)  │                                              │
+│  └──────────────┘                                              │
 └─────────────────────────────────────────────────────────────────┘
-
 ```
 
 ### Data Flow
@@ -128,9 +124,7 @@ The Agency Dashboard is a comprehensive platform for managing agency relationshi
 ### Authentication Flow
 
 ```
-
 User → Clerk Auth → Middleware → Protected Routes → Dashboard
-
 ```
 
 ## ✨ Features
@@ -215,52 +209,49 @@ User → Clerk Auth → Middleware → Protected Routes → Dashboard
 ## 📁 Project Structure
 
 ```
-
 agency-dashboardn/
-├── app/                          \# Next.js App Router
-│   ├── (auth)/                   \# Authentication routes
+├── app/                          # Next.js App Router
+│   ├── (auth)/                   # Authentication routes
 │   │   ├── sign-in/
 │   │   └── sign-up/
-│   ├── (dashboard)/              \# Protected dashboard routes
+│   ├── (dashboard)/              # Protected dashboard routes
 │   │   ├── agencies/
 │   │   │   ├── AgenciesClient.tsx
 │   │   │   └── page.tsx
 │   │   ├── contacts/
 │   │   │   ├── ContactsClient.tsx
 │   │   │   └── page.tsx
-│   │   ├── layout.tsx            \# Dashboard layout
-│   │   └── page.tsx              \# Dashboard home
-│   ├── layout.tsx                \# Root layout
-│   └── globals.css               \# Global styles
+│   │   ├── layout.tsx            # Dashboard layout
+│   │   └── page.tsx               # Dashboard home
+│   ├── layout.tsx                # Root layout
+│   └── globals.css               # Global styles
 │
-├── components/                   \# React components
-│   ├── ui/                       \# Reusable UI components
+├── components/                   # React components
+│   ├── ui/                       # Reusable UI components
 │   │   ├── button.tsx
 │   │   ├── card.tsx
 │   │   ├── dialog.tsx
 │   │   ├── table.tsx
 │   │   └── ...
-│   ├── ContactsTable.tsx         \# Contact row component
-│   ├── Navigation.tsx            \# Navigation menu
-│   ├── Sidebar.tsx               \# Sidebar component
-│   ├── UpgradeDialog.tsx         \# Premium upgrade modal
-│   └── UsageCounter.tsx          \# Usage counter display
+│   ├── ContactsTable.tsx         # Contact row component
+│   ├── Navigation.tsx            # Navigation menu
+│   ├── Sidebar.tsx               # Sidebar component
+│   ├── UpgradeDialog.tsx        # Premium upgrade modal
+│   └── UsageCounter.tsx          # Usage counter display
 │
-├── lib/                          \# Utility functions
-│   ├── actions.ts                \# Server actions
-│   ├── db.ts                     \# Prisma client
-│   └── utils.ts                  \# Helper functions
+├── lib/                          # Utility functions
+│   ├── actions.ts                # Server actions
+│   ├── db.ts                     # Prisma client
+│   └── utils.ts                  # Helper functions
 │
-├── prisma/                       \# Database schema & migrations
-│   ├── data/                     \# Seed data (CSV files)
-│   ├── schema.prisma             \# Database schema
-│   └── seed.ts                   \# Database seeding script
+├── prisma/                       # Database schema & migrations
+│   ├── data/                     # Seed data (CSV files)
+│   ├── schema.prisma             # Database schema
+│   └── seed.ts                   # Database seeding script
 │
-├── public/                       \# Static assets
-├── screenshots/                  \# Project screenshots
-├── middleware.ts                 \# Next.js middleware (auth)
-└── package.json                  \# Dependencies
-
+├── public/                       # Static assets
+├── middleware.ts                 # Next.js middleware (auth)
+└── package.json                  # Dependencies
 ```
 
 ## 🗄️ Database Schema
@@ -268,41 +259,39 @@ agency-dashboardn/
 ### Entity Relationship Diagram
 
 ```
-
 ┌──────────────┐         ┌──────────────┐
 │   Agency     │         │   Contact    │
 ├──────────────┤         ├──────────────┤
 │ id (PK)      │◄──┐     │ id (PK)      │
-│ originalId   │   │     │ originalId   │
-│ name         │   │     │ firstName    │
-│ state        │   │     │ lastName     │
-│ type         │   │     │ email        │
-│ website      │   │     │ phone        │
-│ createdAt    │   │     │ title        │
+│ originalId   │   │     │ originalId  │
+│ name         │   │     │ firstName   │
+│ state        │   │     │ lastName    │
+│ type         │   │     │ email       │
+│ website      │   │     │ phone       │
+│ createdAt    │   │     │ title       │
 └──────────────┘   │     │ agencyId(FK)├──┘
-│     │ createdAt    │
-│     └──────────────┘
-│              │
-│              │
-│     ┌────────▼──────────┐
-│     │  ContactReveal    │
-│     ├──────────────────┤
-│     │ id (PK)          │
-│     │ userId           │
-│     │ contactId (FK)   │
-│     │ revealedAt       │
-│     └──────────────────┘
-│
+                   │     │ createdAt   │
+                   │     └──────────────┘
+                   │              │
+                   │              │
+                   │     ┌────────▼──────────┐
+                   │     │  ContactReveal    │
+                   │     ├──────────────────┤
+                   │     │ id (PK)          │
+                   │     │ userId           │
+                   │     │ contactId (FK)    │
+                   │     │ revealedAt       │
+                   │     └──────────────────┘
+                   │
 ┌──────────────────▼──────┐
-│      UserLimit          │
+│      UserLimit           │
 ├──────────────────────────┤
 │ id (PK)                  │
 │ userId (Unique)          │
 │ count                    │
 │ lastViewDate             │
 └──────────────────────────┘
-
-````
+```
 
 ### Models
 
@@ -341,54 +330,48 @@ agency-dashboardn/
    ```bash
    git clone <repository-url>
    cd agency-dashboardn
-````
+   ```
 
-2.  **Install dependencies**
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-    ```bash
-    npm install
-    ```
+3. **Set up environment variables**
+   Create a `.env` file in the root directory:
+   ```env
+   DATABASE_URL="postgresql://user:password@host:port/database"
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your_clerk_publishable_key"
+   CLERK_SECRET_KEY="your_clerk_secret_key"
+   ```
 
-3.  **Set up environment variables**
-    Create a `.env` file in the root directory:
+4. **Set up the database**
+   ```bash
+   # Generate Prisma Client
+   npx prisma generate
+   
+   # Run migrations
+   npx prisma migrate dev
+   
+   # (Optional) Seed the database
+   npm run prisma:seed
+   ```
 
-    ```env
-    DATABASE_URL="postgresql://user:password@host:port/database"
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your_clerk_publishable_key"
-    CLERK_SECRET_KEY="your_clerk_secret_key"
-    ```
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
-4.  **Set up the database**
-
-    ```bash
-    # Generate Prisma Client
-    npx prisma generate
-
-    # Run migrations
-    npx prisma migrate dev
-
-    # (Optional) Seed the database
-    npm run prisma:seed
-    ```
-
-5.  **Run the development server**
-
-    ```bash
-    npm run dev
-    ```
-
-6.  **Open your browser**
-    Navigate to [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000)
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
 ### Database Seeding
 
 The project includes CSV data files for seeding:
-
-  - `prisma/data/agencies_agency_rows.csv`
-  - `prisma/data/contacts_contact_rows.csv`
+- `prisma/data/agencies_agency_rows.csv`
+- `prisma/data/contacts_contact_rows.csv`
 
 Run the seed script:
-
 ```bash
 npm run prisma:seed
 ```
@@ -400,16 +383,13 @@ npm run prisma:seed
 All server actions are located in `lib/actions.ts` and use the `'use server'` directive.
 
 #### `getAgencies(page, pageSize)`
-
 Fetches paginated list of agencies.
 
 **Parameters:**
-
-  - `page` (number, default: 1) - Page number
-  - `pageSize` (number, default: 20) - Items per page
+- `page` (number, default: 1) - Page number
+- `pageSize` (number, default: 20) - Items per page
 
 **Returns:**
-
 ```typescript
 {
   agencies: Agency[],
@@ -419,28 +399,23 @@ Fetches paginated list of agencies.
 ```
 
 #### `getAllAgencies()`
-
 Fetches all agencies for dropdown/filter purposes.
 
 **Returns:**
-
 ```typescript
 Array<{ id: string, name: string }>
 ```
 
 #### `getContacts(page, pageSize, search, agencyId)`
-
 Fetches paginated list of contacts with optional filtering.
 
 **Parameters:**
-
-  - `page` (number, default: 1) - Page number
-  - `pageSize` (number, default: 20) - Items per page
-  - `search` (string, default: '') - Search query (name/email)
-  - `agencyId` (string | undefined) - Filter by agency
+- `page` (number, default: 1) - Page number
+- `pageSize` (number, default: 20) - Items per page
+- `search` (string, default: '') - Search query (name/email)
+- `agencyId` (string | undefined) - Filter by agency
 
 **Returns:**
-
 ```typescript
 {
   contacts: Contact[],
@@ -452,15 +427,12 @@ Fetches paginated list of contacts with optional filtering.
 **Note:** Contact emails/phones are masked (`****`) unless already revealed by the user.
 
 #### `revealContactDetails(contactId)`
-
 Reveals contact details and increments usage counter.
 
 **Parameters:**
-
-  - `contactId` (string) - Contact ID to reveal
+- `contactId` (string) - Contact ID to reveal
 
 **Returns:**
-
 ```typescript
 {
   data?: { email: string | null, phone: string | null },
@@ -470,18 +442,15 @@ Reveals contact details and increments usage counter.
 ```
 
 **Behavior:**
-
-  - Checks if contact already revealed (doesn't increment)
-  - Checks daily limit (50 views)
-  - Increments counter if under limit
-  - Returns error if limit reached
+- Checks if contact already revealed (doesn't increment)
+- Checks daily limit (50 views)
+- Increments counter if under limit
+- Returns error if limit reached
 
 #### `getUserUsage()`
-
 Gets current user's daily usage statistics.
 
 **Returns:**
-
 ```typescript
 {
   count: number,
@@ -490,75 +459,66 @@ Gets current user's daily usage statistics.
 ```
 
 **Behavior:**
-
-  - Returns `null` if user not authenticated
-  - Automatically resets count if new day
-  - Returns `{ count: 0 }` if no usage record exists
+- Returns `null` if user not authenticated
+- Automatically resets count if new day
+- Returns `{ count: 0 }` if no usage record exists
 
 ## 🧩 Components Overview
 
 ### Layout Components
 
 #### `Sidebar`
-
-  - Collapsible sidebar navigation
-  - User profile display
-  - Responsive design
+- Collapsible sidebar navigation
+- User profile display
+- Responsive design
 
 #### `Navigation`
-
-  - Main navigation menu
-  - Active route highlighting
-  - Icon-based navigation
+- Main navigation menu
+- Active route highlighting
+- Icon-based navigation
 
 ### Feature Components
 
 #### `ContactsTable` (ContactRow)
-
-  - Individual contact row display
-  - "View" button to reveal details
-  - Loading states
-  - Revealed contact indicator
+- Individual contact row display
+- "View" button to reveal details
+- Loading states
+- Revealed contact indicator
 
 #### `ContactsClient`
-
-  - Main contacts page client component
-  - Search and filter functionality
-  - Pagination controls
-  - Upgrade dialog integration
+- Main contacts page client component
+- Search and filter functionality
+- Pagination controls
+- Upgrade dialog integration
 
 #### `AgenciesClient`
-
-  - Agencies listing with cards
-  - Pagination
-  - Agency details display
+- Agencies listing with cards
+- Pagination
+- Agency details display
 
 #### `UsageCounter`
-
-  - Daily usage display
-  - Progress bar visualization
-  - Remaining views counter
-  - Two variants: `compact` and `dashboard`
+- Daily usage display
+- Progress bar visualization
+- Remaining views counter
+- Two variants: `compact` and `dashboard`
 
 #### `UpgradeDialog`
-
-  - Premium upgrade modal
-  - Advantages list
-  - Pricing information
-  - Call-to-action button
+- Premium upgrade modal
+- Advantages list
+- Pricing information
+- Call-to-action button
 
 ### UI Components
 
 Located in `components/ui/`:
-
-  - `button` - Button component with variants
-  - `card` - Card container component
-  - `dialog` - Modal dialog component
-  - `table` - Table components
-  - `input` - Input field component
-  - `select` - Select dropdown component
-  - `badge` - Badge component
-  - `sonner` - Toast notification system
+- `button` - Button component with variants
+- `card` - Card container component
+- `dialog` - Modal dialog component
+- `table` - Table components
+- `input` - Input field component
+- `select` - Select dropdown component
+- `badge` - Badge component
+- `sonner` - Toast notification system
 
 ## 🚢 Deployment
 
@@ -581,15 +541,14 @@ npm start
 
 ### Deploy to Vercel
 
-1.  Push your code to GitHub
-2.  Import project in Vercel
-3.  Add environment variables
-4.  Deploy
+1. Push your code to GitHub
+2. Import project in Vercel
+3. Add environment variables
+4. Deploy
 
 ### Database Migration
 
 For production database:
-
 ```bash
 npx prisma migrate deploy
 ```
@@ -598,34 +557,34 @@ npx prisma migrate deploy
 
 ### Error Handling
 
-  - All database operations have try-catch blocks
-  - Graceful fallbacks when database is unavailable
-  - User-friendly error messages
+- All database operations have try-catch blocks
+- Graceful fallbacks when database is unavailable
+- User-friendly error messages
 
 ### Performance
 
-  - Server-side rendering for initial load
-  - Client-side pagination and filtering
-  - Optimized database queries with indexes
+- Server-side rendering for initial load
+- Client-side pagination and filtering
+- Optimized database queries with indexes
 
 ### Security
 
-  - All sensitive operations are server actions
-  - Authentication required for data access
-  - User-specific data isolation
-  - Contact information masking
+- All sensitive operations are server actions
+- Authentication required for data access
+- User-specific data isolation
+- Contact information masking
 
 ## 🤝 Contributing
 
-1.  Fork the repository
-2.  Create a feature branch
-3.  Make your changes
-4.  Submit a pull request
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## 📄 License
 
 This project is private and proprietary.
 
------
+---
 
 **Built with ❤️ using Next.js, TypeScript, and Prisma**
