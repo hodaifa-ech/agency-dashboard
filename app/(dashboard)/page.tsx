@@ -33,7 +33,7 @@ export default async function DashboardPage() {
   const statHighlights = [
     {
       title: "Total Agencies",
-      value: agencies.length,
+      value: agenciesData.total,
       change: "+8 new this month",
       icon: Building2,
       accent: "from-emerald-500/10 to-emerald-500/0",

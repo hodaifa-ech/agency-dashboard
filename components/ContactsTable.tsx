@@ -52,7 +52,9 @@ export default function ContactRow({ contact, onReveal, onLimitReached }: Contac
           phone: result.data.phone || 'N/A'
         });
         setIsRevealed(true);
-        toast.success("Contact revealed successfully");
+        toast.success("Contact revealed successfully", {
+          className: "!bg-green-50 !border-green-200 !text-green-900",
+        });
         
         // Mettre à jour le compteur si fourni
         if (result.count !== undefined && onReveal) {
