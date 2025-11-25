@@ -39,7 +39,7 @@ export default function Navigation({
               isCollapsed ? "justify-center" : "gap-3",
               isActive
                 ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20"
-                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/60 dark:hover:text-white"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
             )}
             title={isCollapsed ? item.label : undefined}
           >

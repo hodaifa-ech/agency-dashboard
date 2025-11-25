@@ -174,10 +174,14 @@ export async function revealContactDetails(contactId: string) {
   };
 }
 
-export async function getAgencies(page = 1) {
+export async function getAgencies(page = 1, pageSize = 20) {
+  // Get total count for pagination
+  const total = await prisma.agency.count();
+  const totalPages = Math.ceil(total / pageSize);
+  
   const agencies = await prisma.agency.findMany({
-    take: 20,
-    skip: (page - 1) * 20,
+    take: pageSize,
+    skip: (page - 1) * pageSize,
     include: {
       _count: {
         select: { contacts: true }
@@ -186,7 +190,11 @@ export async function getAgencies(page = 1) {
     orderBy: { createdAt: 'desc' }
   });
   
-  return agencies;
+  return {
+    agencies,
+    total,
+    totalPages
+  };
 }
 
 export async function getAllAgencies() {

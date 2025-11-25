@@ -45,17 +45,17 @@ export default function UpgradeDialog({ open, onOpenChange }: UpgradeDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] !bg-white dark:!bg-[#1a1a1a] border-2 border-gray-200 dark:border-gray-700">
+      <DialogContent className="sm:max-w-[500px] !bg-white">
         <DialogHeader>
           <div className="flex items-center justify-center mb-4">
             <div className="rounded-full bg-gradient-to-br from-yellow-400 via-orange-500 to-pink-500 p-3 shadow-lg">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
           </div>
-          <DialogTitle className="text-2xl text-center text-gray-900 dark:text-gray-100">
+          <DialogTitle className="text-2xl text-center text-gray-900">
             Upgrade to Premium
           </DialogTitle>
-          <DialogDescription className="text-center text-base text-gray-600 dark:text-gray-400">
+          <DialogDescription className="text-center text-base text-gray-600">
             You've reached your daily limit of 50 views. Upgrade to Premium to unlock unlimited access and exclusive features!
           </DialogDescription>
         </DialogHeader>
@@ -66,20 +66,20 @@ export default function UpgradeDialog({ open, onOpenChange }: UpgradeDialogProps
               const Icon = feature.icon;
               return (
                 <div key={index} className="flex items-start gap-3">
-                  <div className="mt-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 p-1.5">
-                    <Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <div className="mt-0.5 rounded-full bg-blue-100">
+                    <Icon className="h-4 w-4 text-blue-600" />
                   </div>
-                  <p className="text-sm text-gray-900 dark:text-gray-100">{feature.text}</p>
+                  <p className="text-sm text-gray-900">{feature.text}</p>
                 </div>
               );
             })}
           </div>
 
-          <div className="rounded-lg border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4 text-center">
-            <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-              $29<span className="text-lg text-gray-600 dark:text-gray-400">/month</span>
+          <div className="rounded-lg border-2 border-blue-200">
+            <p className="text-3xl font-bold text-gray-900">
+              $29<span className="text-lg text-gray-600">/month</span>
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Cancel anytime</p>
+            <p className="text-sm text-gray-600">Cancel anytime</p>
           </div>
         </div>
 

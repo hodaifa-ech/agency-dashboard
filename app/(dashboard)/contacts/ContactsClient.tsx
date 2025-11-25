@@ -124,17 +124,17 @@ export default function ContactsClient({
   };
 
   return (
-    <div className="min-h-full bg-white p-6 transition-colors dark:bg-slate-950">
+    <div className="min-h-full bg-white p-6 transition-colors">
       <UpgradeDialog
         open={showUpgradeDialog}
         onOpenChange={setShowUpgradeDialog}
       />
       <div className="mx-auto max-w-6xl space-y-6">
-        <header className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+        <header className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Contacts</h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-2">
+              <h1 className="text-3xl font-bold text-gray-900">Contacts</h1>
+              <p className="text-gray-600">
                 List of all contacts ({total} total)
               </p>
             </div>
@@ -145,20 +145,20 @@ export default function ContactsClient({
         </header>
 
       {remainingViews === 0 && (
-        <Card className="rounded-3xl border border-red-200 bg-red-50 shadow-sm dark:border-red-800 dark:bg-red-900/20">
+        <Card className="rounded-3xl border border-red-200 bg-red-50 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-red-600 dark:text-red-400">Limit Reached</CardTitle>
-            <CardDescription className="text-red-700 dark:text-red-300">
+            <CardTitle className="text-red-600">Limit Reached</CardTitle>
+            <CardDescription className="text-red-700">
               You have reached your daily limit of 50 views. Upgrade to Pro to see more contacts.
             </CardDescription>
           </CardHeader>
         </Card>
       )}
 
-      <Card className="rounded-3xl border border-slate-200 bg-white shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900/70">
+      <Card className="rounded-3xl border border-slate-200 bg-white shadow-sm transition-colors">
         <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-gray-100">Contact List</CardTitle>
-          <CardDescription className="text-gray-600 dark:text-gray-400">
+          <CardTitle className="text-gray-900">Contact List</CardTitle>
+          <CardDescription className="text-gray-600">
             Click "View" to reveal a contact's details
           </CardDescription>
         </CardHeader>
@@ -166,7 +166,7 @@ export default function ContactsClient({
           {/* Search and Filter Controls */}
           <div className="flex flex-col gap-4 md:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
                 type="text"
                 placeholder="Search by name or email..."
@@ -177,7 +177,7 @@ export default function ContactsClient({
             </div>
             <div className="flex gap-2">
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                 <Select
                   value={agencyFilter}
                   onChange={(e) => handleAgencyFilterChange(e.target.value)}
@@ -207,11 +207,11 @@ export default function ContactsClient({
           {/* Table */}
           {loading ? (
             <div className="py-12 text-center">
-              <p className="text-gray-600 dark:text-gray-400">Loading contacts...</p>
+              <p className="text-gray-600">Loading contacts...</p>
             </div>
           ) : contacts.length > 0 ? (
             <>
-              <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/50">
+              <div className="rounded-2xl border border-slate-200 bg-white">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -237,7 +237,7 @@ export default function ContactsClient({
 
               {/* Pagination Controls */}
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600">
                   Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total} contacts
                 </div>
                 <div className="flex items-center gap-2">
@@ -246,7 +246,7 @@ export default function ContactsClient({
                     size="sm"
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1 || loading}
-                    className="text-gray-700 dark:text-gray-100 border-slate-200 dark:border-slate-700"
+                    className="text-gray-700"
                   >
                     <ChevronLeft className="h-4 w-4" />
                     Previous
@@ -274,7 +274,7 @@ export default function ContactsClient({
                             "min-w-[40px]",
                             page === pageNum
                               ? "bg-emerald-600 text-white hover:bg-emerald-500"
-                              : "text-gray-700 dark:text-gray-100 border-slate-200 dark:border-slate-700"
+                              : "text-gray-700"
                           )}
                         >
                           {pageNum}
@@ -287,7 +287,7 @@ export default function ContactsClient({
                     size="sm"
                     onClick={() => handlePageChange(page + 1)}
                     disabled={page === totalPages || loading}
-                    className="text-gray-700 dark:text-gray-100 border-slate-200 dark:border-slate-700"
+                    className="text-gray-700"
                   >
                     Next
                     <ChevronRight className="h-4 w-4" />
@@ -297,8 +297,8 @@ export default function ContactsClient({
             </>
           ) : (
             <div className="py-12 text-center">
-              <Users className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">No contacts found</p>
+              <Users className="h-12 w-12 mx-auto text-gray-400" />
+              <p className="text-gray-600">No contacts found</p>
             </div>
           )}
         </CardContent>

@@ -69,10 +69,10 @@ export default function ContactRow({ contact, onReveal, onLimitReached }: Contac
 
   return (
     <TableRow>
-      <TableCell className="text-gray-900 dark:text-gray-100">{contact.firstName || ''} {contact.lastName || ''}</TableCell>
-      <TableCell className="text-gray-700 dark:text-gray-300">{contact.agency?.name || 'N/A'}</TableCell>
-      <TableCell className="font-mono text-sm text-gray-900 dark:text-gray-100">{details.email}</TableCell>
-      <TableCell className="font-mono text-sm text-gray-900 dark:text-gray-100">{details.phone}</TableCell>
+      <TableCell className="text-gray-900">{contact.firstName || ''} {contact.lastName || ''}</TableCell>
+      <TableCell className="text-gray-700">{contact.agency?.name || 'N/A'}</TableCell>
+      <TableCell className="font-mono text-sm text-gray-900">{details.email}</TableCell>
+      <TableCell className="font-mono text-sm text-gray-900">{details.phone}</TableCell>
       <TableCell>
         {!isRevealed && details.email === '****' ? (
           <Button 
@@ -92,7 +92,7 @@ export default function ContactRow({ contact, onReveal, onLimitReached }: Contac
             )}
           </Button>
         ) : (
-          <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+          <div className="flex items-center gap-2 text-green-600">
             <Eye className="h-4 w-4" />
             <span className="text-sm font-medium">Visible</span>
           </div>
