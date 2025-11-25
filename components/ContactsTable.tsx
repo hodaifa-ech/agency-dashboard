@@ -69,10 +69,10 @@ export default function ContactRow({ contact, onReveal, onLimitReached }: Contac
 
   return (
     <TableRow>
-      <TableCell>{contact.firstName || ''} {contact.lastName || ''}</TableCell>
-      <TableCell>{contact.agency?.name || 'N/A'}</TableCell>
-      <TableCell className="font-mono text-sm">{details.email}</TableCell>
-      <TableCell className="font-mono text-sm">{details.phone}</TableCell>
+      <TableCell className="text-gray-900 dark:text-gray-100">{contact.firstName || ''} {contact.lastName || ''}</TableCell>
+      <TableCell className="text-gray-700 dark:text-gray-300">{contact.agency?.name || 'N/A'}</TableCell>
+      <TableCell className="font-mono text-sm text-gray-900 dark:text-gray-100">{details.email}</TableCell>
+      <TableCell className="font-mono text-sm text-gray-900 dark:text-gray-100">{details.phone}</TableCell>
       <TableCell>
         {!isRevealed && details.email === '****' ? (
           <Button 

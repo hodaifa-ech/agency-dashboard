@@ -10,7 +10,10 @@ interface NavigationProps {
   isCollapsed?: boolean;
 }
 
-export default function Navigation({ mobile = false, isCollapsed = false }: NavigationProps) {
+export default function Navigation({
+  mobile = false,
+  isCollapsed = false,
+}: NavigationProps) {
   const pathname = usePathname();
 
   const navItems = [
@@ -20,25 +23,32 @@ export default function Navigation({ mobile = false, isCollapsed = false }: Navi
   ];
 
   return (
-    <nav className="flex-1 space-y-1 p-4">
+    <nav className={cn("flex-1 space-y-1", mobile ? "p-4" : "px-3 py-4")}>
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
-        
+        const isActive =
+          pathname === item.href ||
+          (item.href !== "/" && pathname?.startsWith(item.href));
+
         return (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              "flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 cursor-pointer",
+              "group flex items-center rounded-2xl px-3 py-2 text-sm font-medium transition-all duration-200",
               isCollapsed ? "justify-center" : "gap-3",
               isActive
-                ? "bg-slate-700 text-white font-semibold"
-                : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/20"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/60 dark:hover:text-white"
             )}
             title={isCollapsed ? item.label : undefined}
           >
-            <Icon className="h-5 w-5 flex-shrink-0" />
+            <Icon
+              className={cn(
+                "h-5 w-5 flex-shrink-0 transition",
+                !isActive && "text-emerald-500/70 group-hover:text-emerald-500"
+              )}
+            />
             {!isCollapsed && <span>{item.label}</span>}
           </Link>
         );

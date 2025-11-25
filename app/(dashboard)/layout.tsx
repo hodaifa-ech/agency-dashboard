@@ -21,11 +21,11 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-white dark:bg-slate-950">
       <Sidebar user={userData} />
 
       {/* Main Content */}
-      <main className="flex-1 overflow-auto md:mt-0 mt-16">
+      <main className="flex-1 overflow-auto md:mt-0 mt-16 bg-white dark:bg-slate-950">
         {children}
       </main>
     </div>

@@ -11,6 +11,7 @@ import UsageCounter from "@/components/UsageCounter";
 import UpgradeDialog from "@/components/UpgradeDialog";
 import { Users, Search, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 import { getContacts, getAllAgencies } from "@/lib/actions";
+import { cn } from "@/lib/utils";
 
 interface Contact {
   id: string;
@@ -38,12 +39,12 @@ interface ContactsClientProps {
   initialCount: number;
 }
 
-export default function ContactsClient({ 
-  initialContacts, 
+export default function ContactsClient({
+  initialContacts,
   initialTotal,
   initialTotalPages,
   initialAgencies,
-  initialCount 
+  initialCount,
 }: ContactsClientProps) {
   const [count, setCount] = useState(initialCount);
   const [contacts, setContacts] = useState(initialContacts);
@@ -123,46 +124,49 @@ export default function ContactsClient({
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <UpgradeDialog 
-        open={showUpgradeDialog} 
-        onOpenChange={setShowUpgradeDialog} 
+    <div className="min-h-full bg-white p-6 transition-colors dark:bg-slate-950">
+      <UpgradeDialog
+        open={showUpgradeDialog}
+        onOpenChange={setShowUpgradeDialog}
       />
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Contacts</h1>
-          <p className="text-muted-foreground mt-2">
-            List of all contacts ({total} total)
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <UsageCounter initialCount={count} />
-        </div>
-      </div>
+      <div className="mx-auto max-w-6xl space-y-6">
+        <header className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Contacts</h1>
+              <p className="text-gray-600 dark:text-gray-400 mt-2">
+                List of all contacts ({total} total)
+              </p>
+            </div>
+            <div className="w-full md:w-auto">
+              <UsageCounter initialCount={count} />
+            </div>
+          </div>
+        </header>
 
       {remainingViews === 0 && (
-        <Card className="border-destructive">
+        <Card className="rounded-3xl border border-red-200 bg-red-50 shadow-sm dark:border-red-800 dark:bg-red-900/20">
           <CardHeader>
-            <CardTitle className="text-destructive">Limit Reached</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-red-600 dark:text-red-400">Limit Reached</CardTitle>
+            <CardDescription className="text-red-700 dark:text-red-300">
               You have reached your daily limit of 50 views. Upgrade to Pro to see more contacts.
             </CardDescription>
           </CardHeader>
         </Card>
       )}
 
-      <Card>
+      <Card className="rounded-3xl border border-slate-200 bg-white shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900/70">
         <CardHeader>
-          <CardTitle>Contact List</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-gray-900 dark:text-gray-100">Contact List</CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
             Click "View" to reveal a contact's details
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Search and Filter Controls */}
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col gap-4 md:flex-row">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
               <Input
                 type="text"
                 placeholder="Search by name or email..."
@@ -173,7 +177,7 @@ export default function ContactsClient({
             </div>
             <div className="flex gap-2">
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
                 <Select
                   value={agencyFilter}
                   onChange={(e) => handleAgencyFilterChange(e.target.value)}
@@ -203,11 +207,11 @@ export default function ContactsClient({
           {/* Table */}
           {loading ? (
             <div className="py-12 text-center">
-              <p className="text-muted-foreground">Loading contacts...</p>
+              <p className="text-gray-600 dark:text-gray-400">Loading contacts...</p>
             </div>
           ) : contacts.length > 0 ? (
             <>
-              <div className="rounded-md border">
+              <div className="rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/50">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -233,7 +237,7 @@ export default function ContactsClient({
 
               {/* Pagination Controls */}
               <div className="flex items-center justify-between">
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {((page - 1) * pageSize) + 1} to {Math.min(page * pageSize, total)} of {total} contacts
                 </div>
                 <div className="flex items-center gap-2">
@@ -242,6 +246,7 @@ export default function ContactsClient({
                     size="sm"
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1 || loading}
+                    className="text-gray-700 dark:text-gray-100 border-slate-200 dark:border-slate-700"
                   >
                     <ChevronLeft className="h-4 w-4" />
                     Previous
@@ -265,7 +270,12 @@ export default function ContactsClient({
                           size="sm"
                           onClick={() => handlePageChange(pageNum)}
                           disabled={loading}
-                          className="min-w-[40px]"
+                          className={cn(
+                            "min-w-[40px]",
+                            page === pageNum
+                              ? "bg-emerald-600 text-white hover:bg-emerald-500"
+                              : "text-gray-700 dark:text-gray-100 border-slate-200 dark:border-slate-700"
+                          )}
                         >
                           {pageNum}
                         </Button>
@@ -277,6 +287,7 @@ export default function ContactsClient({
                     size="sm"
                     onClick={() => handlePageChange(page + 1)}
                     disabled={page === totalPages || loading}
+                    className="text-gray-700 dark:text-gray-100 border-slate-200 dark:border-slate-700"
                   >
                     Next
                     <ChevronRight className="h-4 w-4" />
@@ -286,12 +297,13 @@ export default function ContactsClient({
             </>
           ) : (
             <div className="py-12 text-center">
-              <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <p className="text-muted-foreground">No contacts found</p>
+              <Users className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
+              <p className="text-gray-600 dark:text-gray-400">No contacts found</p>
             </div>
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
