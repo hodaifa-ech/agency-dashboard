@@ -159,7 +159,7 @@ export default function ContactsClient({
         <CardHeader>
           <CardTitle className="text-gray-900">Contact List</CardTitle>
           <CardDescription className="text-gray-600">
-            Click "View" to reveal a contact's details
+            Click &quot;View&quot; to reveal a contact&apos;s details
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -229,6 +229,8 @@ export default function ContactsClient({
                         contact={contact} 
                         onReveal={handleReveal}
                         onLimitReached={handleLimitReached}
+                        currentCount={count}
+                        limit={50}
                       />
                     ))}
                   </TableBody>

@@ -25,9 +25,11 @@ interface ContactRowProps {
   contact: Contact;
   onReveal?: (newCount: number) => void;
   onLimitReached?: () => void;
+  currentCount?: number;
+  limit?: number;
 }
 
-export default function ContactRow({ contact, onReveal, onLimitReached }: ContactRowProps) {
+export default function ContactRow({ contact, onReveal, onLimitReached, currentCount = 0, limit = 50 }: ContactRowProps) {
   const [details, setDetails] = useState({ 
     email: contact.isRevealed ? (contact.email || 'N/A') : '****', 
     phone: contact.isRevealed ? (contact.phone || 'N/A') : '****' 
@@ -36,16 +38,30 @@ export default function ContactRow({ contact, onReveal, onLimitReached }: Contac
   const [isRevealed, setIsRevealed] = useState(contact.isRevealed || false);
 
   const handleReveal = async () => {
+    // Check if limit is already reached before making the request
+    if (currentCount >= limit) {
+      if (onLimitReached) {
+        onLimitReached();
+      }
+      toast.error("🚨 Daily limit reached! Upgrade to Premium to see more contacts.", {
+        duration: 3000,
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await revealContactDetails(contact.id);
       
-      if (result.error === 'LIMIT_REACHED') {
+      if (result.error === 'LIMIT_REACHED' || result.error === 'DATABASE_ERROR') {
+        // Always show the upgrade dialog when limit is reached
         if (onLimitReached) {
           onLimitReached();
-        } else {
-          toast.error("🚨 Daily limit reached! Upgrade to Pro to see more contacts.");
         }
+        // Also show a toast notification
+        toast.error("🚨 Daily limit reached! Upgrade to Premium to see more contacts.", {
+          duration: 3000,
+        });
       } else if (result.data) {
         setDetails({
           email: result.data.email || 'N/A',

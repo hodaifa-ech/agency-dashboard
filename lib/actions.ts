@@ -192,8 +192,15 @@ export async function revealContactDetails(contactId: string) {
     
     // 2. Vérifier si c'est un nouveau jour
     const now = new Date();
-    if (!isSameDay(new Date(userUsage.lastViewDate), now)) {
-      // Reset du compteur
+    const lastViewDate = new Date(userUsage.lastViewDate);
+    
+    // Check if it's a different day (compare year, month, and day)
+    if (
+      lastViewDate.getFullYear() !== now.getFullYear() ||
+      lastViewDate.getMonth() !== now.getMonth() ||
+      lastViewDate.getDate() !== now.getDate()
+    ) {
+      // Reset du compteur seulement si c'est vraiment un nouveau jour
       userUsage = await prisma.userLimit.update({
         where: { userId },
         data: { count: 0, lastViewDate: now }
@@ -313,7 +320,15 @@ export async function getUserUsage() {
     }
     
     const now = new Date();
-    if (!isSameDay(new Date(userUsage.lastViewDate), now)) {
+    const lastViewDate = new Date(userUsage.lastViewDate);
+    
+    // Check if it's a different day (compare year, month, and day)
+    if (
+      lastViewDate.getFullYear() !== now.getFullYear() ||
+      lastViewDate.getMonth() !== now.getMonth() ||
+      lastViewDate.getDate() !== now.getDate()
+    ) {
+      // Only return 0 if it's actually a new day
       return { count: 0, lastViewDate: now };
     }
     
